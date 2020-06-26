@@ -1,0 +1,30 @@
+{
+  "id": "1657202",
+  "name": "shi'xun",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1220302",
+      "name": "安全",
+      "font_class": "anquan",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "10591480",
+      "name": "password",
+      "font_class": "beforetype-",
+      "unicode": "e6d6",
+      "unicode_decimal": 59094
+    },
+    {
+      "icon_id": "13090187",
+      "name": "User Settings",
+      "font_class": "UserSettings",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    }
+  ]
+}

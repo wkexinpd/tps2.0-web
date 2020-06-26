@@ -1,0 +1,136 @@
+/*全局样式表*/
+html,body,#app{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+    color:#333333;
+}
+a:link {
+    text-decoration: none;
+}
+i{
+    font-style: normal;
+}
+main{
+    background: #f5f5f5;
+    height: 100%;
+}
+.main-top{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.data-card{
+    margin-top: 20px;
+    padding: 0 20px 20px 20px;
+}
+.flex-right{
+    /*width: 100%;*/
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+.flex-left{
+    /*width: 100%;*/
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+.flex-between{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.flex-around{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-around;
+}
+.el-tooltip__popper{
+    font-size: 14px;
+    max-width:30%;
+}
+.ql-editor{
+    min-height: 300px;
+    color: #000000!important;
+    background: #FFFFFF!important;
+}
+.show-main{
+    width: 68%;
+    margin: 80px auto;
+}
+.main-show{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+.show-card{
+    width: 28%;
+    height: 270px;
+    margin: 20px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-content: space-between;
+}
+.show-card-img{
+    width: 100%;
+    height: 170px;
+    margin-bottom: 10px;
+}
+.show-card-text{
+    font-size: 20px;
+    margin: 10px 0;
+}
+.page{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+.allData-top{
+    margin: 0 40px;
+    padding-top: 40px;
+}
+.allData-bottom{
+    margin: 0 40px 0 0;
+}
+.lecture-select{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.display-center{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+.show-pointer:hover{
+    cursor:pointer;
+}
+.att{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
