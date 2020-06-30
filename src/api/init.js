@@ -5,7 +5,7 @@ import {Message} from "element-ui";
 const instance = axios.create({
 });
 instance.interceptors.response.use(function (response){
-    if(response.status!=200){
+    if(response.status!==200){
         Message.error(response.data.msg);
     }
     return response;

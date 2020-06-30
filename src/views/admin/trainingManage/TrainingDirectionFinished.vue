@@ -8,18 +8,16 @@
                         <el-breadcrumb-item><i style="color: #393fb6;">选择已完成</i></el-breadcrumb-item>
                     </el-breadcrumb>
                     <el-col :span="14" style="margin-left: 1180px;">
-                        <download-excel :data="json_data" :fields="json_fields" name="讲座选择完成学生名单.xls" >
-                            <el-button type="primary" @click="exportAll">导出完成学生名单</el-button>
-                        </download-excel>
+                        <Download :downloadDate="downloadDate"></Download>
                     </el-col>
                     <el-col :span="5" style="margin-left:-600px">
-                        <download-excel :data="json_data_first" :fields="json_fields_direction" name="首选方向信息名单.xls" >
-                            <el-button type="primary" @click="exportFirst">首选优先</el-button>
+                        <download-excel name="首选方向信息名单.xls" >
+                            <el-button type="primary">首选优先</el-button>
                         </download-excel>
                     </el-col>
                     <el-col :span="5" style="margin-left:-490px">
-                        <download-excel :data="json_data_second" :fields="json_fields_direction" name="备选方向信息名单.xls" >
-                            <el-button type="primary" @click="exportSecond">备选优先</el-button>
+                        <download-excel  name="备选方向信息名单.xls" >
+                            <el-button type="primary">备选优先</el-button>
                         </download-excel>
                     </el-col>
                 </el-row>
@@ -98,33 +96,28 @@
 </template>
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
+    import Download from "@/components/Download";
     export default {
         name: "TrainingDirectionFinished",
         data() {
             return {
-                json_data_first:[],
-                json_data_second:[],
-                json_fields_direction:{
-                    "方向ID": "directionId",
-                    "方向": "directionName",
-                    "人数": "num",
+                downloadDate:{
+                    file:{
+                        name:'导出完成学生名单',
+                        url:'',
+                        studentName:"",
+                        majorClassId: "",
+                        from: "",
+                        limit: "",
+                    },
+                    json_fields: {
+                        "班级": "majorClassName",
+                        "学号": "studentNumber",
+                        "姓名": "studentName",
+                        "首选方向": "firstDirectionName",
+                        "备选方向": "secondDirectionName"
+                    }
                 },
-                json_fields: {
-                    "班级": "majorClassName",
-                    "学号": "studentNumber",
-                    "姓名": "studentName",
-                    "首选方向": "firstDirectionName",
-                    "备选方向": "secondDirectionName"
-                },
-                json_data: [],
-                json_meta: [
-                    [
-                        {
-                            " key ": " charset ",
-                            " value ": " utf- 8 "
-                        }
-                    ]
-                ],
                 options: [],
                 queryInfo: {
                     studentName: '',
@@ -136,40 +129,19 @@
             }
         },
         components:{
-            CollegeClass
+            CollegeClass,
+            Download
         },
         created() {
             this.getTrainingDirectionFinishedData();
         },
         methods: {
-            exportAll(){
-                this.$axios.get(this.$api.LectureFinishedDataDownload, { studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: 700,}).then(res => {
-                    if (res.data.code !== 200) {
-                        this.$message.error("获取完成讲座选择信息失败");
-                    }else{
-                        this.json_data = res.data.result.records;
-                    }
-                })
-            },
-            exportFirst(){
-                // this.$axios.get(this.$api.LectureFirstDirectionDownload, { studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: 700,}).then(res => {
-                //     if (res.data.code !== 200) {
-                //         this.$message.error("获取首选方向信息失败");
-                //     }else{
-                //         this.json_data_first = res.data.result;
-                //     }
-                // })
-            },
-            exportSecond(){
-                // this.$axios.get(this.$api.LectureSecondDirectionDownload, { studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: 700,}).then(res => {
-                //     if (res.data.code !== 200) {
-                //         this.$message.error("获取备选方向信息失败");
-                //     }else{
-                //         this.json_data_second = res.data.result;
-                //     }
-                // })
-            },
             getTrainingDirectionFinishedData() {
+                this.downloadDate.file.limit = this.queryInfo.limit;
+                this.downloadDate.file.from = this.queryInfo.from;
+                this.downloadDate.file.majorClassId = this.queryInfo.collegeClassId.value;
+                this.downloadDate.file.studentName = this.queryInfo.studentName;
+                this.downloadDate.file.url = this.$api.TrainingDirectionFinished;
                 this.$axios.get(this.$api.TrainingDirectionFinished, {studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
                     if (res.data.code !== 200) {
                         this.$message.error("获取完成方向选择信息失败");

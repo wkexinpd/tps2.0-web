@@ -22,12 +22,8 @@ Vue.component('downloadExcel', JsonExcel);
 
 // 引入api文件
 import api from "./api/api";
-import upload from "./api/upload";
-import videoUpload from "./api/videoUpload";
 Vue.prototype.$axios = axios;
 Vue.prototype.$api = api;
-Vue.prototype.$upload = upload;
-Vue.prototype.$videoupload = videoUpload;
 Vue.config.productionTip = false;
 Vue.use(VueQuillEditor);
 Vue.use(VideoPlayer);

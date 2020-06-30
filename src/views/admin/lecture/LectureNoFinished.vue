@@ -9,9 +9,7 @@
                     </el-breadcrumb>
                 </el-row>
                 <el-row>
-                    <download-excel :data="json_data" :fields="json_fields" name="讲座选择未完成学生名单.xls" >
-                        <el-button type="primary" @click="exportAll">导出未完成学生名单</el-button>
-                    </download-excel>
+                    <Download :downloadDate="downloadDate"></Download>
                 </el-row>
             </div>
         </el-container>
@@ -88,24 +86,26 @@
 </template>
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
+    import Download from "@/components/Download";
     export default {
         name: "LectureNoFinished",
         data() {
             return {
-                json_fields: {
-                    "班级": "majorClassName",
-                    "学号": "studentNumber",
-                    "姓名": "studentName",
+                downloadDate:{
+                    file:{
+                        name:'导出未完成学生名单',
+                        url:'',
+                        studentName:"",
+                        majorClassId: "",
+                        from: "",
+                        limit: "",
+                    },
+                    json_fields: {
+                        "班级": "majorClassName",
+                        "学号": "studentNumber",
+                        "姓名": "studentName",
+                    }
                 },
-                json_data: [],
-                json_meta: [
-                    [
-                        {
-                            " key ": " charset ",
-                            " value ": " utf- 8 "
-                        }
-                    ]
-                ],
                 options: [],
                 queryInfo: {
                     studentName: '',
@@ -121,23 +121,25 @@
             this.getLectureNoFinishedData();
         },
         components:{
-          CollegeClass
+          CollegeClass,
+            Download
         },
         methods: {
-            exportAll(){
-                this.$axios.get(this.$api.LectureNoFinishedData, { studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: 700,}).then(res => {
-                    if (res.data.code !== 200) {
-                        this.$message.error("获取未完成讲座选择信息失败");
-                    }else{
-                        this.json_data = res.data.result.records;
-                    }
-                })
-            },
             getLectureNoFinishedData() {
-                this.$axios.get(this.$api.LectureNoFinishedData, { studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
+                this.downloadDate.file.limit = this.queryInfo.limit;
+                this.downloadDate.file.from = this.queryInfo.from;
+                this.downloadDate.file.majorClassId = this.queryInfo.collegeClassId.value;
+                this.downloadDate.file.studentName = this.queryInfo.studentName;
+                this.downloadDate.file.url = this.$api.LectureNoFinishedData;
+                this.$axios.get(this.$api.LectureNoFinishedData, {
+                    studentName: this.queryInfo.studentName,
+                    majorClassId: this.queryInfo.collegeClassId.value,
+                    from: this.queryInfo.from,
+                    limit: this.queryInfo.limit,
+                }).then(res => {
                     if (res.data.code !== 200) {
                         this.$message.error("获取未完成讲座选择信息失败");
-                    }else{
+                    } else {
                         this.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
@@ -150,19 +152,7 @@
             handleCurrentChange(newPage) {
                 this.queryInfo.from = newPage
                 this.getLectureNoFinishedData();
-            },
-            download () {
-                let url = window.URL.createObjectURL('');
-                let link = document.createElement('a');
-                link.style.display = 'none';
-                link.href = url
-                link.setAttribute('download', '未完成讲座选择学生名单.xlsx');
-                document.body.appendChild(link);
-                link.click()
             }
-        },
-        mounted() {
-
         }
     }
 </script>

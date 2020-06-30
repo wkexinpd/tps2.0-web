@@ -9,7 +9,7 @@
                     </el-breadcrumb>
                 </el-row>
                 <el-row>
-                    <el-button type="primary" @click="download">导出完成学生名单</el-button>
+                    <el-button type="primary">导出未完成学生名单</el-button>
                 </el-row>
             </div>
         </el-container>
@@ -113,15 +113,6 @@
             handleCurrentChange(newPage) {
                 this.queryInfo.from = newPage
                 this.getTrainingDirectionNoFinishedData();
-            },
-            download () {
-                let url = window.URL.createObjectURL('');
-                let link = document.createElement('a');
-                link.style.display = 'none';
-                link.href = url
-                link.setAttribute('download', '已完成讲座选择学生名单.xlsx');
-                document.body.appendChild(link);
-                link.click()
             }
         },
         mounted() {

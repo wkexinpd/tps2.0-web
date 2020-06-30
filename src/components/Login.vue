@@ -85,7 +85,6 @@
                                 role['ROLE_ADMIN'] = "admin";
                                 role['ROLE_TEACHER'] = "teacher";
                                 role['ROLE_COMPANY'] = "company";
-                                role['ROLE_STUDENT'] = "student";
                                 role['ROLE_CLASS'] = "class";
                                 window.sessionStorage.setItem('token', res.data.result.token);
                                 window.sessionStorage.setItem("login", this.loginForm.username);

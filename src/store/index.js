@@ -473,55 +473,6 @@ role['teacher'] = [
         ]
 
     }];
-
-role['student'] = [{
-    path: '/student',
-    name: 'student',
-    component: () => import("@/views/student/Student"),
-    redirect: '/student/welcome',
-    children: [
-        {
-            path: "welcome",
-            name: "welcome",
-            meta: {
-                title: "首页",
-            },
-            component: () => import("@/views/student/welcome/StudentIndex"),
-        },
-        {
-            path: "studentLectureList",
-            name: "studentLectureList",
-            meta: {
-                title: "讲座选择",
-            },
-            component: () => import("@/views/student/welcome/StudentLectureList"),
-        },
-        {
-            path: "studentVideoList",
-            name: "studentVideoList",
-            meta: {
-                title: "视频资源",
-            },
-            component: () => import("@/views/student/welcome/StudentVideList"),
-        },
-        {
-            path: "studentTrainingDirection",
-            name: "studentTrainingDirection",
-            meta: {
-                title: "实训方向",
-            },
-            component: () => import("@/views/student/welcome/StudentTrainingDirection"),
-        },
-        {
-            path: "studentTrainingManage",
-            name: "studentTrainingManage",
-            meta: {
-                title: "实训管理",
-            },
-            component: () => import("@/views/student/welcome/StudentTrainingManage"),
-        },
-    ]
-}];
 export default new Vuex.Store({
     state: {
         routeData: []

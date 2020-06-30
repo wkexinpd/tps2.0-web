@@ -16,19 +16,6 @@ const routes = [
         name: 'login',
         component: Login
     },
-    // {
-    //     path: '/student',
-    //     name: 'student',
-    //     component: Student,
-    //     redirect: '/student/welcome',
-    //     children: [
-    //         {
-    //             path: "showVideo",
-    //             name: "showVideo",
-    //             component: ShowVideo,
-    //         },
-    //    ]
-    // }
 ]
 
 const router = new VueRouter({

@@ -9,7 +9,7 @@
                     </el-breadcrumb>
                 </el-row>
                 <el-row>
-                        <el-button type="primary" @click="download">导出完成学生名单</el-button>
+                    <Download :downloadDate="downloadDate"></Download>
                 </el-row>
             </div>
         </el-container>
@@ -86,6 +86,7 @@
 </template>
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
+    import Download from "@/components/Download";
     export default {
         name: "LectureFinished",
         data() {
@@ -99,16 +100,38 @@
                 },
                 collegeClass: [],
                 count: 0,
+                downloadDate:{
+                    file:{
+                        name:'导出完成学生名单',
+                        url:'',
+                        studentName:"",
+                        majorClassId: "",
+                        from: "",
+                        limit: "",
+                    },
+                    json_fields: {
+                        "班级": "majorClassName",
+                        "学号": "studentNumber",
+                        "姓名": "studentName",
+                    }
+                }
+
             }
         },
         components:{
-            CollegeClass
+            CollegeClass,
+            Download
         },
         created() {
             this.getLectureNoFinishedData();
         },
         methods: {
             getLectureNoFinishedData() {
+                this.downloadDate.file.limit = this.queryInfo.limit;
+                this.downloadDate.file.from = this.queryInfo.from;
+                this.downloadDate.file.majorClassId = this.queryInfo.collegeClassId.value;
+                this.downloadDate.file.studentName = this.queryInfo.studentName;
+                this.downloadDate.file.url = this.$api.LectureFinishedData;
                 this.$axios.get(this.$api.LectureFinishedData, {studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
                     if (res.data.code !== 200) {
                         this.$message.error("获取完成讲座选择信息失败");
@@ -125,19 +148,7 @@
                 this.queryInfo.from = newPage
                 this.getLectureNoFinishedData();
             },
-            download () {
-                let url = window.URL.createObjectURL('');
-                let link = document.createElement('a');
-                link.style.display = 'none';
-                link.href = url
-                link.setAttribute('download', '已完成讲座选择学生名单.xlsx');
-                document.body.appendChild(link);
-                link.click()
-            }
         },
-        mounted() {
-
-        }
     }
 </script>
 

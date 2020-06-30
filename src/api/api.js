@@ -90,18 +90,6 @@ export default {
     DelCompanyLecture: '/lecture/delete',
 
 
-    //学生
-    TrainingLectureData:'/lecture/select',
-    SelectedLecture:'/lecture/choose-by-student',
-    LectureChoose: '/lecture/choose',
-    TrainingVideoTop12:'auth/getTrainingVideoTop12',
-    DelSelectedLecture:'/lecture/deselect',
-    DirectionFirstData:'/major-direction-relation/select',
-    FirstSelectDirection:'/direction/choose',
-    GetDirectionStatus:'/direction/choose-status',
-    CurriculumData:'/curriculum/select-all',
-
-
     //实训班级
     AddCurriculum:'/curriculum/add',
     GetCurriculumData:'/curriculum/select-own',
