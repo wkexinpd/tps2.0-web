@@ -61,7 +61,7 @@
     import CollegeClass from "@/components/filter/CollegeClass";
     import TrainingDirection from "@/components/filter/TrainingDirection";
     import TrainingClass from "@/components/filter/TrainingClass";
-    import TableComponent from "../../../components/TableComponent";
+    import TableComponent from "../../../components/Table/TableComponent";
     export default {
         name: "AttendanceDataManage",
         data() {

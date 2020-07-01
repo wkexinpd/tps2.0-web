@@ -64,7 +64,7 @@
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
     import Download from "@/components/Download";
-    import TableComponent from "../../../components/TableComponent";
+    import TableComponent from "../../../components/Table/TableComponent";
     export default {
         name: "TrainingDirectionFinished",
         data() {
