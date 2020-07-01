@@ -31,7 +31,6 @@
         mounted(){
             this.options=this.tableColumnDate.options;
             this.tableColumnNames = this.tableColumnDate.tableNames;
-            console.log(this.tableColumnDate)
         },
         watch: {
             tableColumnDate: {
