@@ -31,28 +31,7 @@
                 </el-col>
                 <!--       table区域-->
                 <el-col style="margin-top: 15px">
-                    <el-table
-                            :data="options"
-                            border>
-                        <el-table-column
-                                prop="majorClassName"
-                                label="班级"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="studentNumber"
-                                label="学号"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="studentName"
-                                label="姓名"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                    </el-table>
+                    <TableComponent :tableDate="tableDate"></TableComponent>
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
@@ -74,11 +53,22 @@
 </template>
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
+    import TableComponent from "../../../components/TableComponent";
     export default {
         name: "TrainingDirectionManage",
         data() {
             return {
                 options: [],
+                tableDate:{
+                    options:[],
+                    tableNames:[
+                        {name:'备选方向',prop:'secondDirectionName'},
+                        {name:'学号',prop:'studentNumber'},
+                        {name:'姓名',prop:'studentName'},
+                        {name:'班级',prop:'majorClassName'},
+                        {name:'首选方向',prop:'firstDirectionName'},
+                    ],
+                },
                 queryInfo: {
                     studentName: '',
                     collegeClassId: {},
@@ -89,7 +79,8 @@
             }
         },
         components:{
-            CollegeClass
+            CollegeClass,
+            TableComponent
         },
         created() {
             this.getTrainingDirectionNoFinishedData();
@@ -101,17 +92,18 @@
                         this.$message.error("获取完成方向选择信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
 
                 })
             },
             handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
+                this.queryInfo.limit = newSize;
                 this.getTrainingDirectionNoFinishedData();
             },
             handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
+                this.queryInfo.from = newPage;
                 this.getTrainingDirectionNoFinishedData();
             }
         },

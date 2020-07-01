@@ -41,40 +41,7 @@
                 </el-col>
                 <!--       table区域-->
                 <el-col style="margin-top: 15px">
-                    <el-table
-                            :data="options"
-                            border>
-                        <el-table-column
-                                prop="majorClassName"
-                                label="班级"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="studentNumber"
-                                label="学号"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="studentName"
-                                label="姓名"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="firstDirectionName"
-                                label="首选方向"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="secondDirectionName"
-                                label="备选方向"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                    </el-table>
+                    <TableComponent :tableDate="tableDate"></TableComponent>
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
@@ -97,6 +64,7 @@
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
     import Download from "@/components/Download";
+    import TableComponent from "../../../components/TableComponent";
     export default {
         name: "TrainingDirectionFinished",
         data() {
@@ -119,6 +87,16 @@
                     }
                 },
                 options: [],
+                tableDate:{
+                    options:[],
+                    tableNames:[
+                        {name:'备选方向',prop:'secondDirectionName'},
+                        {name:'学号',prop:'studentNumber'},
+                        {name:'姓名',prop:'studentName'},
+                        {name:'班级',prop:'majorClassName'},
+                        {name:'首选方向',prop:'firstDirectionName'},
+                    ],
+                },
                 queryInfo: {
                     studentName: '',
                     collegeClassId: {},
@@ -130,7 +108,8 @@
         },
         components:{
             CollegeClass,
-            Download
+            Download,
+            TableComponent
         },
         created() {
             this.getTrainingDirectionFinishedData();
@@ -147,6 +126,7 @@
                         this.$message.error("获取完成方向选择信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
 

@@ -31,40 +31,7 @@
                 </el-col>
                 <!--       table区域-->
                 <el-col style="margin-top: 15px">
-                    <el-table
-                            :data="options"
-                            border>
-                        <el-table-column
-                                prop="majorClassName"
-                                label="班级"
-                                style="width: 20%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="studentNumber"
-                                label="学号"
-                                style="width: 20%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="studentName"
-                                label="姓名"
-                                style="width: 20%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="chooseLectures"
-                                label="已选讲座"
-                                style="width: 20%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="chooseNum"
-                                label="已选数量"
-                                style="width: 20%"
-                                min-width="180">
-                        </el-table-column>
-                    </el-table>
+                    <TableComponent :tableDate="tableDate"></TableComponent>
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
@@ -87,6 +54,7 @@
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
     import Download from "@/components/Download";
+    import TableComponent from "../../../components/TableComponent";
     export default {
         name: "LectureFinished",
         data() {
@@ -114,13 +82,23 @@
                         "学号": "studentNumber",
                         "姓名": "studentName",
                     }
+                },
+                tableDate:{
+                    options:[],
+                    tableNames:[
+                        {name:'已选数量',prop:'chooseNum'},
+                        {name:'学号',prop:'studentNumber'},
+                        {name:'姓名',prop:'studentName'},
+                        {name:'班级',prop:'majorClassName'},
+                        {name:'已选讲座',prop:'chooseLectures'},
+                     ],
                 }
-
             }
         },
         components:{
             CollegeClass,
-            Download
+            Download,
+            TableComponent
         },
         created() {
             this.getLectureNoFinishedData();
@@ -137,15 +115,16 @@
                         this.$message.error("获取完成讲座选择信息失败");
                     }
                     this.options = res.data.result.records;
+                    this.tableDate.options = res.data.result.records;
                     this.count = res.data.result.total;
                 })
             },
             handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
+                this.queryInfo.limit = newSize;
                 this.getLectureNoFinishedData();
             },
             handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
+                this.queryInfo.from = newPage;
                 this.getLectureNoFinishedData();
             },
         },
