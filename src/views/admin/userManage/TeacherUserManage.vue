@@ -20,24 +20,7 @@
                     <el-table
                             :data="options"
                             border>
-                        <el-table-column
-                                prop="name"
-                                label="用户名"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
-                        <el-table-column
-                                prop="phone"
-                                label="联系方式"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
-                        <el-table-column
-                                prop="qq"
-                                label="QQ"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 label="操作"
                                 style=" width: 25%"
@@ -87,9 +70,10 @@
 
 <script>
     import ResetPassword from "../../../components/ResetPassword";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "TeacherUserManage",
-        components: {ResetPassword},
+        components: {ResetPassword,TableColumnComponent},
         data() {
             var checkMobile = (rule, value, callback) => {
                 const regMobile = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
@@ -101,6 +85,14 @@
             };
             return {
                 options: [],
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'用户名',prop:'name'},
+                        {name:'联系方式',prop:'phone'},
+                        {name:'QQ',prop:'qq'}
+                    ]
+                },
                 id: '',
                 queryInfo: {
                     query: '',
@@ -139,16 +131,17 @@
                         this.$message.error("获取教师信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableColumnDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
                 })
             },
             handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
+                this.queryInfo.limit = newSize;
                 this.getTeacherData();
             },
             handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
+                this.queryInfo.from = newPage;
                 this.getTeacherData();
             },
             //    监听对话框关闭事件

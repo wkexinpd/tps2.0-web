@@ -17,36 +17,7 @@
                     <el-table
                             :data="options"
                             border>
-                        <el-table-column
-                                prop="chooseDirectionInfo.studentNumber"
-                                label="学号"
-                                style="width: 15%"
-                                min-width="60">
-                        </el-table-column>
-                        <el-table-column
-                                prop="chooseDirectionInfo.studentName"
-                                label="姓名"
-                                style="width: 15%"
-                                min-width="50">
-                        </el-table-column>
-                        <el-table-column
-                                prop="nowDirectionName"
-                                label="原方向"
-                                style="width: 15%"
-                                min-width="90">
-                        </el-table-column>
-                        <el-table-column
-                                prop="modifyDirection"
-                                label="申请方向"
-                                style="width: 15%"
-                                min-width="90">
-                        </el-table-column>
-                        <el-table-column
-                                prop="reson"
-                                label="申请理由"
-                                style="width: 15%"
-                                min-width="190">
-                        </el-table-column>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 label="操作"
                                 style=" width: 25%"
@@ -82,6 +53,7 @@
     </div>
 </template>
 <script>
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "TrainingDirectionFinished",
         data() {
@@ -93,11 +65,24 @@
                     from: 1,
                     limit: 5,
                 },
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'学号',prop:'chooseDirectionInfo.studentNumber'},
+                        {name:'姓名',prop:'chooseDirectionInfo.studentName'},
+                        {name:'原方向',prop:'nowDirectionName'},
+                        {name:'申请方向',prop:'modifyDirection'},
+                        {name:'申请理由',prop:'reson'}
+                    ]
+                },
                 count: 0,
             }
         },
         created() {
             this.getChangeDirectionManageData();
+        },
+        components:{
+            TableColumnComponent
         },
         methods: {
             getChangeDirectionManageData() {
@@ -106,8 +91,8 @@
                         this.$message.error("获取学生申请修改信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableColumnDate.options = res.data.result.records;
                     }
-
                 })
             },
             handleSizeChange(newSize) {

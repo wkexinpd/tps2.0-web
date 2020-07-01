@@ -38,57 +38,7 @@
                             :data="options"
                             border
                     width="100%">
-                        <el-table-column
-                                prop="studentNumber"
-                                label="学号"
-                                align="center"
-                                style="width:12%"
-                                min-width="110">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="姓名"
-                                align="center"
-                                style="width: 12%"
-                                min-width="80">
-                        </el-table-column>
-                        <el-table-column
-                                prop="majorName"
-                                label="学院方向"
-                                align="center"
-                                style="width: 12%"
-                                min-width="140">
-                        </el-table-column>
-                        <el-table-column
-                                prop="majorClassName"
-                                label="班级"
-                                align="center"
-                                style="width: 12%"
-                                min-width="90">
-                        </el-table-column>
-                        <el-table-column
-                                prop="phone"
-                                label="联系方式"
-                                align="center"
-                                style="width: 12%"
-                                min-width="112">
-                        </el-table-column>
-                        <el-table-column
-                                prop="directionName"
-                                label="实训方向"
-                                align="center"
-                                style="width: 12%"
-                                min-width="120"
-                        >
-                        </el-table-column>
-                        <el-table-column
-                                prop="directionClassName"
-                                label="实训班级"
-                                align="center"
-                                style="width: 12%"
-                                min-width="120"
-                               >
-                        </el-table-column>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 prop="name"
                                 label="操作"
@@ -175,6 +125,7 @@
     import TrainingDirection from "@/components/filter/TrainingDirection";
     import TrainingClass from "@/components/filter/TrainingClass";
     import ResetPassword from "../../../components/ResetPassword";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "StudentUserManage",
         data() {
@@ -195,6 +146,18 @@
             };
             return {
                 options: [],
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'学号',prop:'studentNumber'},
+                        {name:'姓名',prop:'name'},
+                        {name:'联系方式',prop:'phone'},
+                        {name:'学院方向',prop:'majorName'},
+                        {name:'班级',prop:'majorClassName'},
+                        {name:'实训方向',prop:'directionName'},
+                        {name:'实训班级',prop:'directionClassName'}
+                    ]
+                },
                 id: '',
                 queryInfo: {
                     studentName: '',
@@ -266,6 +229,7 @@
             TrainingClass,
             CollegeDirection,
             CollegeClass,
+            TableColumnComponent
         },
         methods: {
             getStudentData() {
@@ -274,6 +238,7 @@
                         this.$message.error("获取学生信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableColumnDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
                 })

@@ -30,39 +30,15 @@
                 <!--       table区域-->
                 <el-col style="margin-top: 15px">
                     <el-table :data="options" border>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
-                                prop="title"
-                                label="讲座名称"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                label="讲座封面"
-                                style="width: 5%"
-                                min-width="90">
+                                label="讲座大纲"
+                                style="width: 5%;"
+                                min-width="90"
+                                :show-overflow-tooltip="true">
                             <template slot-scope="scope">
-                                <el-image
-                                        style="width: 100px; height: 60px"
-                                        :src="scope.row.img"></el-image>
+                                <el-button type="primary" @click="lectureOutline(scope.row.content,scope.row.title)">查看大纲</el-button>
                             </template>
-                        </el-table-column>
-                        <el-table-column
-                                prop="speaker"
-                                label="主讲人"
-                                style="width: 5%"
-                                min-width="90">
-                        </el-table-column>
-                        <el-table-column
-                                prop="directionName"
-                                label="所属方向"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="place"
-                                label="讲座地址"
-                                style="width: 5%"
-                                min-width="90">
                         </el-table-column>
                         <el-table-column
                                 label="讲座时间"
@@ -73,12 +49,13 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                                label="讲座大纲"
-                                style="width: 5%;"
-                                min-width="90"
-                                :show-overflow-tooltip="true">
+                                label="讲座封面"
+                                style="width: 5%"
+                                min-width="90">
                             <template slot-scope="scope">
-                                <el-button type="primary" @click="lectureOutline(scope.row.content,scope.row.title)">查看大纲</el-button>
+                                <el-image
+                                        style="width: 100px; height: 60px"
+                                        :src="scope.row.img"></el-image>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -168,6 +145,7 @@
 
 <script>
     import TrainingDirection from "@/components/filter/TrainingDirection";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "LectureManage",
         data() {
@@ -200,8 +178,16 @@
                     }
                 },
                 showVideoVisible:false,
-                options: [
-                ],
+                options: [],
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'讲座名称',prop:'title'},
+                        {name:'主讲人',prop:'speaker'},
+                        {name:'所属方向',prop:'directionName'},
+                        {name:'讲座地址',prop:'place'},
+                    ]
+                },
                 id: '',
                 action: '',
                 uploadVisible: true,
@@ -240,7 +226,8 @@
             this.getLectureData();
         },
         components:{
-            TrainingDirection
+            TrainingDirection,
+            TableColumnComponent
         },
         methods: {
             showVideo(videoUrl){
@@ -259,15 +246,16 @@
                         this.$message.error("获取讲座信息失败");
                     }
                     this.options = res.data.result.records;
+                    this.tableColumnDate.options = res.data.result.records;
                     this.count = res.data.result.total;
                 })
             },
             handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
+                this.queryInfo.limit = newSize;
                 this.getLectureData();
             },
             handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
+                this.queryInfo.from = newPage;
                 this.getLectureData();
             },
             //    监听对话框关闭事件

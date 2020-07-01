@@ -36,48 +36,7 @@
                             :data="options"
                             border
                             style="width: 100%">
-                        <el-table-column
-                                prop="companyName"
-                                label="企业"
-                                align="center"
-                                :xs="24" :sm="24" :md="24">
-                        </el-table-column>
-                        <el-table-column
-                                prop="directionName"
-                                label="实训方向"
-                                align="center"
-                                style="width:15%">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                label="班级名称"
-                                align="center"
-                                style="width:15%">
-                        </el-table-column>
-                        <el-table-column
-                                prop="teacher"
-                                label="班主任"
-                                align="center"
-                                style="width:15%">
-                        </el-table-column>
-                        <el-table-column
-                                prop="phone"
-                                label="联系方式"
-                                align="center"
-                                style="width:15%">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                label="上课地址"
-                                align="center"
-                                style="width:15%">
-                        </el-table-column>
-                        <el-table-column
-                                prop="classPersonNumber"
-                                label="学生人数"
-                                align="center"
-                                style="width:10%">
-                        </el-table-column>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 prop="name"
                                 label="操作"
@@ -178,6 +137,7 @@
     import TrainingDirection from "@/components/filter/TrainingDirection";
     import TrainingCompany from "@/components/filter/TrainingCompany";
     import ResetPassword from "@/components/ResetPassword";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "TrainingClassManage",
         data() {
@@ -212,6 +172,18 @@
                     limit: 5,
                 },
                 options: [],
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'企业',prop:'companyName'},
+                        {name:'实训方向',prop:'directionName'},
+                        {name:'班级名称',prop:'name'},
+                        {name:'班主任',prop:'teacher'},
+                        {name:'联系方式',prop:'phone'},
+                        {name:'上课地址',prop:'address'},
+                        {name:'学生人数',prop:'classPersonNumber'}
+                    ]
+                },
                 count: 0,
                 addTrainingClassVisible: false,
                 addTrainingClassForm: {
@@ -290,6 +262,7 @@
                         this.$message.error("获取实训班级信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableColumnDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
                 })
@@ -391,6 +364,7 @@
             ResetPassword,
             TrainingDirection,
             TrainingCompany,
+            TableColumnComponent
         },
         mounted() {
 

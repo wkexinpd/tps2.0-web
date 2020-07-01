@@ -30,30 +30,8 @@
                 <!--       table区域-->
                 <el-col style="margin-top: 15px">
                     <el-table :data="options" border>
-                        <el-table-column
-                                prop="companyName"
-                                label="企业"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="lectureName"
-                                label="讲座名称"
-                                style="width: 15%"
-                                min-width="180">
-                        </el-table-column>
-                        <el-table-column
-                                prop="selectedNum"
-                                label="选择人数"
-                                style="width: 5%"
-                                min-width="90">
-                        </el-table-column>
-                        <el-table-column
-                                prop="lectureAddress"
-                                label="讲座地址"
-                                style="width: 5%"
-                                min-width="90">
-                        </el-table-column>
+
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 label="讲座时间"
                                 style="width: 15%"
@@ -74,6 +52,7 @@
                                 </el-button>
                             </template>
                         </el-table-column>
+
                     </el-table>
                 </el-col>
                 <!--        分页区域-->
@@ -98,11 +77,21 @@
 
 <script>
     import TrainingCompany from "@/components/filter/TrainingCompany";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "LectureSelected",
         data() {
             return {
                 options: [],
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'讲座地址',prop:'lectureAddress'},
+                        {name:'企业',prop:'companyName'},
+                        {name:'讲座名称',prop:'lectureName'},
+                        {name:'选择人数',prop:'selectedNum'}
+                    ]
+                },
                 id: '',
                 queryInfo: {
                     companyId: {},
@@ -117,7 +106,8 @@
             this.getLectureData();
         },
         components:{
-            TrainingCompany
+            TrainingCompany,
+            TableColumnComponent
         },
         methods: {
             getLectureData() {
@@ -126,15 +116,16 @@
                         this.$message.error("获取讲座信息失败");
                     }
                     this.options = res.data.result.records;
+                    this.tableColumnDate.options = res.data.result.records;
                     this.count = res.data.result.total;
                 })
             },
             handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
+                this.queryInfo.limit = newSize;
                 this.getLectureData();
             },
             handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
+                this.queryInfo.from = newPage;
                 this.getLectureData();
             },
         },

@@ -28,30 +28,7 @@
                     <el-table
                             :data="options"
                             border>
-                        <el-table-column
-                                prop="companyName"
-                                label="企业名称"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
-                        <el-table-column
-                                prop="directions"
-                                label="所授课程方向"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
-                        <el-table-column
-                                prop="leader"
-                                label="企业负责人"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
-                        <el-table-column
-                                prop="phone"
-                                label="联系方式"
-                                style="width: 50%"
-                                :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
-                        </el-table-column>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 label="操作"
                                 style=" width: 25%"
@@ -133,9 +110,10 @@
 
 <script>
     import ResetPassword from "../../../components/ResetPassword";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "CompanyUserManage",
-        components: {ResetPassword},
+        components: {ResetPassword,TableColumnComponent},
         data() {
             var checkMobile = (rule, value, callback) => {
                 const regMobile = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
@@ -147,6 +125,15 @@
             };
             return {
                 options: [],
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'企业名称',prop:'companyName'},
+                        {name:'所授课程方向',prop:'directions'},
+                        {name:'企业负责人',prop:'leader'},
+                        {name:'联系方式',prop:'phone'},
+                    ]
+                },
                 id: '',
                 queryInfo: {
                     query: '',
@@ -209,16 +196,17 @@
                         this.$message.error("获取企业信息失败");
                     }else{
                         this.options = res.data.result.records;
+                        this.tableColumnDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }
                 })
             },
             handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
+                this.queryInfo.limit = newSize;
                 this.getCompanyData();
             },
             handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
+                this.queryInfo.from = newPage;
                 this.getCompanyData();
             },
             //    监听对话框关闭事件
@@ -275,7 +263,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.$axios.delete(this.$api.DelCompany,id).then(res=>{
-                        if (res.data.code==200){
+                        if (res.data.code===200){
                             this.$message({
                                 type: 'success',
                                 message: '删除成功!'
