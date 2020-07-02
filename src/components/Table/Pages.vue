@@ -3,12 +3,11 @@
         <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="queryInfo.from"
+                :current-page="from"
                 :page-sizes="[5,10,15,20]"
                 :page-size="queryInfo.limit"
                 layout="total,sizes,prev, pager, next, jumper"
-                :total="count"
-
+                :total="total"
                  >
         </el-pagination>
     </div>
@@ -17,43 +16,33 @@
 <script>
     export default {
         name: "Pages",
+        props:{
+            from:{
+                type:Number
+            },
+            total:{
+                type:Number
+            }
+        },
         data(){
             return {
-                options: [],
                 queryInfo: {
                     studentName: '',
                     collegeClassId: {},
                     from: 1,
                     limit: 5,
-                },
-                collegeClass: [],
-                count: 0,
+                }
             }
         },
-        created() {
-            this.getData();
-        },
         methods: {
-            getData() {
-                this.$axios.get(this.$api.LectureFinishedData, {studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
-                    if (res.data.code !== 200) {
-                        this.$message.error("获取完成讲座选择信息失败");
-                    }
-                    this.options = res.data.result.records;
-                    this.count = res.data.result.total;
-                })
-            },
             handleSizeChange(newSize) {
                 this.queryInfo.limit = newSize;
-                this.getData();
-                this.$emit("msg",this.queryInfo.limit + this.options + this.count)
+                this.$emit('pageChange', this.queryInfo);
 
             },
             handleCurrentChange(newPage) {
                 this.queryInfo.from = newPage;
-                this.getData();
-                this.$emit("msg",this.queryInfo.from+ this.options + this.count)
-
+                this.$emit('pageChange', this.queryInfo);
             },
         },
     }

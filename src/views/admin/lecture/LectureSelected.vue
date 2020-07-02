@@ -57,17 +57,7 @@
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
+                    <Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages>
                 </el-col>
             </el-row>
         </el-card>
@@ -78,6 +68,7 @@
 <script>
     import TrainingCompany from "@/components/filter/TrainingCompany";
     import TableColumnComponent from "../../../components/Table/TableColumnComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "LectureSelected",
         data() {
@@ -107,9 +98,15 @@
         },
         components:{
             TrainingCompany,
-            TableColumnComponent
+            TableColumnComponent,
+            Pages
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getLectureData();
+            },
             getLectureData() {
                 this.$axios.get(this.$api.LectureSelectedData, {companyId: this.queryInfo.companyId.value, lectureName: this.queryInfo.lectureName, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
                     if (res.data.code !== 200) {
@@ -119,15 +116,7 @@
                     this.tableColumnDate.options = res.data.result.records;
                     this.count = res.data.result.total;
                 })
-            },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize;
-                this.getLectureData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage;
-                this.getLectureData();
-            },
+            }
         },
         mounted() {
 

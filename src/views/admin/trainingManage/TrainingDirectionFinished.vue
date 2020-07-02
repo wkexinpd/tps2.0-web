@@ -45,17 +45,7 @@
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
+                    <Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages>
                 </el-col>
             </el-row>
         </el-card>
@@ -65,6 +55,7 @@
     import CollegeClass from "@/components/filter/CollegeClass";
     import Download from "@/components/Download";
     import TableComponent from "../../../components/Table/TableComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "TrainingDirectionFinished",
         data() {
@@ -109,12 +100,18 @@
         components:{
             CollegeClass,
             Download,
-            TableComponent
+            TableComponent,
+            Pages
         },
         created() {
             this.getTrainingDirectionFinishedData();
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getTrainingDirectionFinishedData();
+            },
             getTrainingDirectionFinishedData() {
                 this.downloadDate.file.limit = this.queryInfo.limit;
                 this.downloadDate.file.from = this.queryInfo.from;
@@ -131,23 +128,6 @@
                     }
 
                 })
-            },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
-                this.getTrainingDirectionFinishedData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
-                this.getTrainingDirectionFinishedData();
-            },
-            download () {
-                let url = window.URL.createObjectURL('');
-                let link = document.createElement('a');
-                link.style.display = 'none';
-                link.href = url
-                link.setAttribute('download', '已完成讲座选择学生名单.xlsx');
-                document.body.appendChild(link);
-                link.click()
             }
         },
         mounted() {

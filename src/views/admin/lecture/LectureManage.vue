@@ -81,19 +81,7 @@
                     </el-table>
                 </el-col>
                 <!--        分页区域-->
-                <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
-                </el-col>
+                <el-col><Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages></el-col>
             </el-row>
         </el-card>
         <!--修改讲座弹框-->
@@ -146,6 +134,7 @@
 <script>
     import TrainingDirection from "@/components/filter/TrainingDirection";
     import TableColumnComponent from "../../../components/Table/TableColumnComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "LectureManage",
         data() {
@@ -216,9 +205,7 @@
                     ],
                     lectureTime: [
                         {required: true, message: '请选择讲座时间', trigger: 'blur'},
-                    ],
-
-
+                    ]
                 },
             }
         },
@@ -227,9 +214,15 @@
         },
         components:{
             TrainingDirection,
-            TableColumnComponent
+            TableColumnComponent,
+            Pages
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getLectureData();
+            },
             showVideo(videoUrl){
                 this.playerOptions.sources=[
                     {
@@ -239,7 +232,6 @@
                 ];
                 this.showVideoVisible = true;
             },
-
             getLectureData() {
                 this.$axios.get(this.$api.CompanyLectureData, { directionId: this.queryInfo.directionId.value, speaker: this.queryInfo.speaker, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
                     if (res.data.code !== 200) {
@@ -249,14 +241,6 @@
                     this.tableColumnDate.options = res.data.result.records;
                     this.count = res.data.result.total;
                 })
-            },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize;
-                this.getLectureData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage;
-                this.getLectureData();
             },
             //    监听对话框关闭事件
             editLectureFormClosed() {

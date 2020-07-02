@@ -38,17 +38,7 @@
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
+                    <Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages>
                 </el-col>
             </el-row>
         </el-card>
@@ -62,6 +52,7 @@
     import TrainingDirection from "@/components/filter/TrainingDirection";
     import TrainingClass from "@/components/filter/TrainingClass";
     import TableComponent from "../../../components/Table/TableComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "AttendanceDataManage",
         data() {
@@ -105,9 +96,15 @@
             TrainingClass,
             CollegeDirection,
             CollegeClass,
-            TableComponent
+            TableComponent,
+            Pages
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getStudentData();
+            },
             getStudentData() {
                 this.$axios.get(this.$api.StudentData, {directionClassId:this.queryInfo.trainingClassId.value,directionId:this.queryInfo.trainingDirectionId.value,from:this.queryInfo.from,limit:this.queryInfo.limit,majorClassId:this.queryInfo.collegeClassId.value,majorId:this.queryInfo.collegeDirectionId.value}).then(res => {
                     if (res.data.code !== 200) {
@@ -118,15 +115,7 @@
                         this.count = res.data.result.total;
                     }
                 })
-            },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize;
-                this.getStudentData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
-                this.getStudentData();
-            },
+            }
         },
         mounted() {
 

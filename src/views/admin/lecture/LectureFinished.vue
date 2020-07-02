@@ -8,9 +8,7 @@
                         <el-breadcrumb-item><i style="color: #393fb6;">选择已完成</i></el-breadcrumb-item>
                     </el-breadcrumb>
                 </el-row>
-                <el-row>
-                    <Download :downloadDate="downloadDate"></Download>
-                </el-row>
+                <el-row><Download :downloadDate="downloadDate"></Download></el-row>
             </div>
         </el-container>
         <el-card class="data-card">
@@ -27,26 +25,11 @@
                             <el-button type="primary" @click="getLectureNoFinishedData">查找学生</el-button>
                         </div>
                     </div>
-
                 </el-col>
                 <!--       table区域-->
-                <el-col style="margin-top: 15px">
-                    <TableComponent :tableDate="tableDate"></TableComponent>
-                </el-col>
+                <el-col style="margin-top: 15px"><TableComponent :tableDate="tableDate"></TableComponent></el-col>
                 <!--        分页区域-->
-                <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
-                </el-col>
+                <el-col><Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages></el-col>
             </el-row>
         </el-card>
     </div>
@@ -55,6 +38,7 @@
     import CollegeClass from "@/components/filter/CollegeClass";
     import Download from "@/components/Download";
     import TableComponent from "../../../components/Table/TableComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "LectureFinished",
         data() {
@@ -98,12 +82,18 @@
         components:{
             CollegeClass,
             Download,
-            TableComponent
+            TableComponent,
+            Pages
         },
         created() {
             this.getLectureNoFinishedData();
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getLectureNoFinishedData();
+            },
             getLectureNoFinishedData() {
                 this.downloadDate.file.limit = this.queryInfo.limit;
                 this.downloadDate.file.from = this.queryInfo.from;
@@ -118,15 +108,7 @@
                     this.tableDate.options = res.data.result.records;
                     this.count = res.data.result.total;
                 })
-            },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize;
-                this.getLectureNoFinishedData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage;
-                this.getLectureNoFinishedData();
-            },
+            }
         },
     }
 </script>

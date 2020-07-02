@@ -35,17 +35,7 @@
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
+                    <Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages>
                 </el-col>
             </el-row>
         </el-card>
@@ -54,6 +44,7 @@
 <script>
     import CollegeClass from "@/components/filter/CollegeClass";
     import TableComponent from "../../../components/Table/TableComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "TrainingDirectionManage",
         data() {
@@ -80,12 +71,18 @@
         },
         components:{
             CollegeClass,
-            TableComponent
+            TableComponent,
+            Pages
         },
         created() {
             this.getTrainingDirectionNoFinishedData();
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getTrainingDirectionNoFinishedData();
+            },
             getTrainingDirectionNoFinishedData() {
                 this.$axios.get(this.$api.TrainingDirectionNoFinished, {studentName: this.queryInfo.studentName, majorClassId: this.queryInfo.collegeClassId.value, from: this.queryInfo.from, limit: this.queryInfo.limit,}).then(res => {
                     if (res.data.code !== 200) {
@@ -97,14 +94,6 @@
                     }
 
                 })
-            },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize;
-                this.getTrainingDirectionNoFinishedData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage;
-                this.getTrainingDirectionNoFinishedData();
             }
         },
         mounted() {

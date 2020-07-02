@@ -47,17 +47,7 @@
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
+                    <Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages>
                 </el-col>
             </el-row>
         </el-card>
@@ -111,9 +101,10 @@
 <script>
     import ResetPassword from "../../../components/ResetPassword";
     import TableColumnComponent from "../../../components/Table/TableColumnComponent";
+    import Pages from "../../../components/Table/Pages";
     export default {
         name: "CompanyUserManage",
-        components: {ResetPassword,TableColumnComponent},
+        components: {ResetPassword,TableColumnComponent,Pages},
         data() {
             var checkMobile = (rule, value, callback) => {
                 const regMobile = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
@@ -201,12 +192,9 @@
                     }
                 })
             },
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize;
-                this.getCompanyData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage;
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
                 this.getCompanyData();
             },
             //    监听对话框关闭事件
