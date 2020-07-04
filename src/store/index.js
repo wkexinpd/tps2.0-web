@@ -415,12 +415,12 @@ role['teacher'] = [
                         component: ()=> import("@/views/admin/lecture/LectureSelected"),
                     },
                     {
-                        path: 'teacherLectureManage',
-                        name: 'teacherLectureManage',
+                        path: 'lectureManage',
+                        name: 'lectureManage',
                         meta: {
                             title: "讲座信息查看"
                         },
-                        component: ()=> import("@/views/teacher/lecture/TeacherLectureManage"),
+                        component: ()=> import("@/views/admin/lecture/LectureManage"),
                     }
                 ]
             },

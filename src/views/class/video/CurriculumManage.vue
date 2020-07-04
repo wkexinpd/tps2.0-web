@@ -18,16 +18,7 @@
                 <!--       table区域-->
                 <el-col style="margin-top: 15px">
                     <el-table :data="options" border>
-                        <el-table-column
-                                prop="name"
-                                label="课程名称"
-                                min-width="90">
-                        </el-table-column>
-                        <el-table-column
-                                prop="teacher"
-                                label="主讲人"
-                                min-width="90">
-                        </el-table-column>
+                        <TableColumnComponent :tableColumnDate="tableColumnDate"></TableColumnComponent>
                         <el-table-column
                                 label="课程封面"
                                 min-width="90">
@@ -37,27 +28,12 @@
                                         :src="scope.row.coverUrl"></el-image>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                                prop="description"
-                                label="课程描述"
-                                :show-overflow-tooltip="true"
-                                min-width="180">
-                        </el-table-column>
+
                     </el-table>
                 </el-col>
                 <!--        分页区域-->
                 <el-col>
-                    <div class="block" style="margin-top: 20px">
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="queryInfo.from"
-                                :page-sizes="[5,10,15,20,50,100]"
-                                :page-size="queryInfo.limit"
-                                layout="total,sizes,prev, pager, next, jumper"
-                                :total="count">
-                        </el-pagination>
-                    </div>
+                    <Pages @pageChange="pageChange" :total="count" :from="queryInfo.from"></Pages>
                 </el-col>
             </el-row>
         </el-card>
@@ -118,6 +94,8 @@
 </template>
 
 <script>
+    import Pages from "../../../components/Table/Pages";
+    import TableColumnComponent from "../../../components/Table/TableColumnComponent";
     export default {
         name: "CurriculumManage",
         props: {
@@ -126,8 +104,20 @@
                 default: 1
             }
         },
+        components:{
+          Pages,
+          TableColumnComponent
+        },
         data() {
             return {
+                tableColumnDate:{
+                    options:[],
+                    tableColumnNames:[
+                        {name:'课程名称',prop:'name'},
+                        {name:'主讲人',prop:'teacher'},
+                        {name:'视频描述',prop:'description'},
+                    ]
+                },
                 fileList: [],//文件列
                 showProgress: false,//进度条的显示
                 progress: 0, //进度条数据
@@ -166,9 +156,14 @@
             this.getCurriculumData();
         },
         methods: {
+            pageChange(item){
+                this.queryInfo.from = item.from;
+                this.queryInfo.limit = item.limit;
+                this.getCurriculumData();
+            },
             addCurriculum(){
                   this.$axios.post(this.$api.AddCurriculum,{coverUrl:this.addForm.url,description:this.addForm.curriculumDescription,name:this.addForm.curriculumName,teacher:this.addForm.curriculumTeacher}).then(res =>{
-                      if (res.data.code==200){
+                      if (res.data.code===200){
                           this.$message.success("课程添加成功");
                           this.addCurriculumVisible = false;
                           this.getCurriculumData();
@@ -182,8 +177,9 @@
             },
             getCurriculumData(){
                 this.$axios.get(this.$api.GetCurriculumData,this.queryInfo).then(res=>{
-                    if (res.data.code==200){
+                    if (res.data.code===200){
                         this.options = res.data.result.records;
+                        this.tableColumnDate.options = res.data.result.records;
                         this.count = res.data.result.total;
                     }else{
                         this.$message.error(res.data.msg)
@@ -220,15 +216,6 @@
             },
             Upload(file) {
                 this.$upload.upload(this , file,0);
-            },
-
-            handleSizeChange(newSize) {
-                this.queryInfo.limit = newSize
-                this.getLectureData();
-            },
-            handleCurrentChange(newPage) {
-                this.queryInfo.from = newPage
-                this.getLectureData();
             },
         },
         mounted() {
