@@ -11,7 +11,7 @@
     "@babel/core": "^7.10.0",
     "@babel/preset-env": "^7.10.0",
     "ali-oss": "^6.7.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "echarts": "^4.7.0",
     "element-ui": "^2.13.1",
