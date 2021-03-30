@@ -10,7 +10,7 @@ export default {
   name: 'app',
   created: function() {
       setTimeout(function() {
-          document.body.removeChild(document.getElementById('loading-of-index'))
+          document.body.removeChild(document.getElementById('loading- of-index'))
       }, 900)
   }
 }

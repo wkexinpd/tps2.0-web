@@ -4,7 +4,7 @@
             <div>中北大学软件学院实训管理系统</div>
             <div style="height: 40px" class="head-right">
                 <div class="demo-basic--circle" style="height: 40px;margin-right: 30px">
-                    <div class="block"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
+                    <div class="block"><el-avatar :size="40" :lazyload="circleUrl"></el-avatar></div>
                 </div>
                 <div>
                     <el-dropdown trigger="hover" style="color: #FFFFFF;font-size: 16px">

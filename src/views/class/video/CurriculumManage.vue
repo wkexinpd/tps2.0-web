@@ -25,7 +25,7 @@
                             <template slot-scope="scope">
                                 <el-image
                                         style="width: 100px; height: 60px"
-                                        :src="scope.row.coverUrl"></el-image>
+                                        :lazyload="scope.row.coverUrl"></el-image>
                             </template>
                         </el-table-column>
 

@@ -1,4 +1,10 @@
 module.exports = {
+    // 打包优化：工程文件打包的时候不生成.map文件
+    /**
+     * npm run build编译之后，我们查看编译生成的文件，发现有很多.map文件，这些文件占了不小的空间。
+     * .map文件的作用是帮助编译后的代码调试，但是我们上线的代码已经调试完成，所以上线时可以不生成
+     * .map文件。
+     */
     productionSourceMap: false,
     css: {
         loaderOptions: {

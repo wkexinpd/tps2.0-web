@@ -17,6 +17,7 @@ import VideoPlayer from "vue-video-player";
 import 'video.js/dist/video-js.css';
 import 'vue-video-player/src/custom-theme.css';
 import JsonExcel from 'vue-json-excel';
+import vueLazyload from 'vue-lazyload'
 
 Vue.component('downloadExcel', JsonExcel);
 
@@ -31,7 +32,8 @@ Vue.prototype.$videoupload = videoUpload;
 Vue.config.productionTip = false;
 Vue.use(VueQuillEditor);
 Vue.use(VideoPlayer);
-//添加全局前置导航守卫
+Vue.use(vueLazyload);
+// 添加全局前置导航守卫
 router.beforeEach((to, form, next) => {
     if (to.name !== "login" && !sessionStorage.getItem('login') && !sessionStorage.getItem('token')) {
         next({name: "login"});
